@@ -1,42 +1,74 @@
-import React from 'react';
-import { Filter, Bell } from 'lucide-react';
-import '../styles/MenuSuperior.css';
+import React, { useState, useRef, useEffect } from "react";
+import { Filter, Bell } from "lucide-react";
+import "../styles/MenuSuperior.css";
 
 export default function MenuSuperior() {
-  
-  // Função de exemplo para o filtro
-  const handleFiltroClick = () => {
-    console.log('Filtro clicado! Abre o painel de filtros.');
-    // Implementar a lógica de abrir o modal ou painel de filtros
-  };
+  const [mostrarFiltro, setMostrarFiltro] = useState(false);
+  const filtroRef = useRef(null);
 
-  // Função de exemplo para o sino
+  const handleFiltroClick = () => setMostrarFiltro((prev) => !prev);
+
+  // Fechar ao clicar fora
+  useEffect(() => {
+    const handleClickFora = (e) => {
+      if (filtroRef.current && !filtroRef.current.contains(e.target)) {
+        setMostrarFiltro(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickFora);
+    return () => document.removeEventListener("mousedown", handleClickFora);
+  }, []);
+
   const handleNotificacaoClick = () => {
-    console.log('Sino clicado! Abre a lista de notificações.');
-    // Implementar a lógica de exibir as notificações
+    console.log("Sino clicado!");
   };
 
   return (
     <header className="menu-superior-container">
-      
-      {/* Lado Esquerdo: Filtro */}
-      <button 
-        className="menu-icon-btn filtro-btn"
-        onClick={handleFiltroClick}
-        aria-label="Filtro"
-      >
-        <Filter size={24} />
-      </button>
+      {/* Botão de filtro */}
+      <div style={{ position: "relative" }}>
+        <button
+          className="menu-icon-btn filtro-btn"
+          onClick={handleFiltroClick}
+          aria-label="Filtro"
+        >
+          <Filter size={24} />
+        </button>
 
-      {/* Lado Direito: Sino de Notificação */}
-      <button 
+        {mostrarFiltro && (
+          <div className="filtro-painel" ref={filtroRef}>
+            <span className="filtro-titulo">Filtrar tarefas</span>
+
+            <select>
+              <option value="">Todas as categorias</option>
+              <option value="Trabalho">Trabalho</option>
+              <option value="Estudos">Estudos</option>
+              <option value="Pessoal">Pessoal</option>
+            </select>
+
+            <select>
+              <option value="">Todas as prioridades</option>
+              <option value="Alta">Alta</option>
+              <option value="Média">Média</option>
+              <option value="Baixa">Baixa</option>
+            </select>
+
+            <input type="date" />
+
+            <button className="btn-aplicar-filtro">Aplicar</button>
+          </div>
+        )}
+      </div>
+
+      {/* Botão de notificações */}
+      <button
         className="menu-icon-btn notificacao-btn"
         onClick={handleNotificacaoClick}
         aria-label="Notificações"
       >
         <Bell size={24} />
       </button>
-
     </header>
   );
 }
+
