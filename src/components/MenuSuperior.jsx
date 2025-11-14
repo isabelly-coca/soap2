@@ -1,14 +1,26 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Filter, Bell } from "lucide-react";
+import { Link } from "react-router-dom";
 import "../styles/MenuSuperior.css";
+import { verificarVencimentos } from "../logic/verificarVencimentos";
 
 export default function MenuSuperior() {
   const [mostrarFiltro, setMostrarFiltro] = useState(false);
+  const [qtdNotificacao, setQtdNotificacao] = useState(0);
   const filtroRef = useRef(null);
 
-  const handleFiltroClick = () => setMostrarFiltro((prev) => !prev);
+  const handleFiltroClick = () => setMostrarFiltro(prev => !prev);
 
-  // Fechar ao clicar fora
+  // Carrega quantidade de notificações
+  useEffect(() => {
+    const tarefas = JSON.parse(localStorage.getItem("tarefas")) || [];
+
+    const { vencidas, proximas } = verificarVencimentos(tarefas);
+
+    setQtdNotificacao(vencidas.length + proximas.length);
+  }, []);
+
+  // Fechar filtro ao clicar fora
   useEffect(() => {
     const handleClickFora = (e) => {
       if (filtroRef.current && !filtroRef.current.contains(e.target)) {
@@ -19,19 +31,12 @@ export default function MenuSuperior() {
     return () => document.removeEventListener("mousedown", handleClickFora);
   }, []);
 
-  const handleNotificacaoClick = () => {
-    console.log("Sino clicado!");
-  };
-
   return (
     <header className="menu-superior-container">
-      {/* Botão de filtro */}
+      
+      {/* BOTÃO DO FILTRO */}
       <div style={{ position: "relative" }}>
-        <button
-          className="menu-icon-btn filtro-btn"
-          onClick={handleFiltroClick}
-          aria-label="Filtro"
-        >
+        <button className="menu-icon-btn filtro-btn" onClick={handleFiltroClick}>
           <Filter size={24} />
         </button>
 
@@ -54,21 +59,23 @@ export default function MenuSuperior() {
             </select>
 
             <input type="date" />
-
             <button className="btn-aplicar-filtro">Aplicar</button>
           </div>
         )}
       </div>
 
-      {/* Botão de notificações */}
-      <button
-        className="menu-icon-btn notificacao-btn"
-        onClick={handleNotificacaoClick}
-        aria-label="Notificações"
-      >
+      {/* BOTÃO DO SINO + BADGE */}
+      <Link to="/notificacao" className="menu-icon-btn notificacao-btn">
         <Bell size={24} />
-      </button>
+
+        {qtdNotificacao > 0 && (
+          <span className="notificacao-badge pulse">
+            {qtdNotificacao}
+          </span>
+        )}
+      </Link>
     </header>
   );
 }
+
 

@@ -101,7 +101,9 @@ export default function CalendarioPage() {
         {diasRenderizados}
       </div>
 
-      <button className="btn-flutuante">+</button>
+      <Link to="/cadastrar-tarefa" className="btn-add">
+        +
+      </Link>
       <MenuInferior />
     </div>
   );

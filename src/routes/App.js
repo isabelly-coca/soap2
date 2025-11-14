@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 
 import LoginPage from "../pages/LoginPage";
 import TarefasPage from "../pages/TarefasPage";
+import NotificacaoPage from "../pages/NotificacaoPage";
 import CadastrarTarefaPage from "../pages/CadastrarTarefaPage";
 import CadastroPage from "../pages/CadastroPage";
 import CalendarioPage from "../pages/CalendarioPage";
@@ -23,6 +24,7 @@ function App() {
         <Route path="/cadastrar-tarefa" element={<CadastrarTarefaPage />} />
 
         {/* Tela principal (após login) */}
+        <Route path="/notificacao" element={<NotificacaoPage/>}/>
         <Route path="/tarefas" element={<TarefasPage />} />
         <Route path="/calendario-page" element={<CalendarioPage />} />
         <Route path="/perfil-page" element={<PerfilUsuarioPage />} />

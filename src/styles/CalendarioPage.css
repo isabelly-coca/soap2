@@ -1,19 +1,18 @@
-
 html, body, #root, .calendario-container { 
     height: 100%;
     width: 100%;
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Inclui padding e border no cálculo da largura/altura */
+    box-sizing: border-box;
    font-family: "Poppins", sans-serif;
     background-color: #f8f9fa;
 }
 
 .calendario-container {
-    display: flex; /* Transforma em Flex Container */
-    flex-direction: column; /* Organiza os filhos verticalmente */
+    display: flex; 
+    flex-direction: column; 
     padding-bottom: 80px;
-    /* Garante que os elementos se espalhem verticalmente */
+ 
 }
 
 .titulo {
@@ -26,16 +25,13 @@ html, body, #root, .calendario-container {
     font-size: 1.8em;
 }
 
-/* ==================================== */
-/* 2. CABEÇALHO E NAVEGAÇÃO             */
-/* ==================================== */
 
 .cabecalho-calendario {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px 15px;
-    background-color:#3c4365; /* Azul primário */
+    background-color:#3c4365;
     color: white;
 }
 
@@ -60,55 +56,48 @@ html, body, #root, .calendario-container {
     border-radius: 4px;
 }
 
-/* ==================================== */
-/* 3. LAYOUT DE GRID (CALENDÁRIO)       */
-/* ==================================== */
-
-/* Container dos nomes dos dias da semana (header) */
 .dias-semana-header {
     display: grid;
-    /* 7 colunas, todas com a mesma largura (1 fração) */
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
     font-weight: bold;
     padding: 8px 0;
     border-bottom: 1px solid #ccc;
-    background-color: #e9ecef; /* Cor de fundo suave */
+    background-color: #e9ecef;
     color: #495057;
 }
 
-/* Container principal do Grid */
+
 .grid-calendario {
-    /* CHAVE: Ocupa todo o espaço vertical disponível */
+  
     flex-grow: 1; 
     
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    gap: 0; /* Remove o gap para linhas de borda contínuas */
+    gap: 0; 
     border-top: 1px solid #ddd;
     
-    /* Permite a rolagem apenas dentro do grid, se o conteúdo exceder */
+
     overflow-y: auto; 
 }
 
-/* Estilo para cada célula de dia */
+
 .dia-celula {
     border-right: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     padding: 5px;
-    height: 100px; /* Altura padrão da célula (ajuste se necessário) */
+    height: 100px; 
     overflow-y: auto; 
     background-color: #ffffff;
     position: relative;
     font-size: 0.9em;
 }
 
-/* Limpa a borda direita da última coluna (Sábado) */
 .dia-celula:nth-child(7n) {
     border-right: none;
 }
 
-/* Estilo para o número do dia */
+
 .dia-numero {
     position: absolute;
     top: 5px;
@@ -118,15 +107,15 @@ html, body, #root, .calendario-container {
     color: #343a40;
 }
 
-/* Estilo para a área de tarefas */
+
 .tarefas-dia {
-    margin-top: 25px; /* Espaço para o número do dia */
+    margin-top: 25px; 
     padding-top: 5px;
 }
 
 .tarefa {
-    background-color: #e0f7fa; /* Cor para tarefas (Azul claro) */
-    border-left: 3px solid #00bcd4; /* Destaque lateral */
+    background-color: #e0f7fa; 
+    border-left: 3px solid #00bcd4;
     border-radius: 4px;
     padding: 2px 5px;
     margin-bottom: 3px;
@@ -143,20 +132,20 @@ html, body, #root, .calendario-container {
     background-color: #b2ebf2;
 }
 
-/* Estilo para dias que têm tarefa (opcional) */
+
 .dia-com-tarefa {
     background-color: #fcfcfc;
 }
 
-/* Estilo para o botão flutuante (Adicionar) */
+
 .btn-flutuante {
     position: fixed;
-    bottom: 90px; /* Acima do MenuInferior */
+    bottom: 90px; 
     right: 20px;
     width: 60px;
     height: 60px;
     border-radius: 50%;
-    background-color: #6c63ff;/* Verde de sucesso */
+    background-color: #6c63ff;
     color: white;
     font-size: 2.5em;
     line-height: 50px;

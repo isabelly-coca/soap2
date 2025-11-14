@@ -11,10 +11,10 @@ export default function LoginPage() {
         <input type="email" placeholder="EMAIL" className="input-field" />
         <input type="password" placeholder="SENHA" className="input-field" />
 
-        <button className="login-button">
-        <Link to="/tarefas" className="tarefas-link">
-       LOGIN
-       </Link></button>
+        <Link to="/tarefas" className="login-button">
+  LOGIN
+</Link>
+
         <br />
 
         <div className="links">
