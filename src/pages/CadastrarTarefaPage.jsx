@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/pages/CadastrarTarefaPage.jsx
+import React, { useState, useEffect } from "react"; 
 import "../styles/CadastrarTarefaPage.css";
 import MenuSuperior from "../components/MenuSuperior";
 import MenuInferior from "../components/MenuInferior";
@@ -23,6 +24,17 @@ export default function CadastrarTarefaPage() {
       "Estudos",
     ];
     setCategorias(categoriasSalvas);
+
+    // Ouvir atualizações vindas do MenuSuperior
+    const atualizarCategorias = () => {
+      const novas = JSON.parse(localStorage.getItem("categorias")) || [];
+      setCategorias(novas);
+    };
+
+    window.addEventListener("categorias-atualizadas", atualizarCategorias);
+
+    return () =>
+      window.removeEventListener("categorias-atualizadas", atualizarCategorias);
   }, []);
 
   // Salva uma nova categoria no localStorage
@@ -30,7 +42,12 @@ export default function CadastrarTarefaPage() {
     if (novaCategoria.trim() && !categorias.includes(novaCategoria)) {
       const novas = [...categorias, novaCategoria];
       setCategorias(novas);
+
       localStorage.setItem("categorias", JSON.stringify(novas));
+
+      // 🔔 Atualiza menus e filtros em outras telas
+      window.dispatchEvent(new Event("categorias-atualizadas"));
+
       setNovaCategoria("");
       alert("Categoria cadastrada com sucesso!");
     }
@@ -42,33 +59,61 @@ export default function CadastrarTarefaPage() {
   };
 
   const handleCadastrar = () => {
-    if (!form.titulo || !form.categoria) {
-      alert("Preencha pelo menos o título e a categoria!");
+    // VALIDAÇÃO DOS CAMPOS OBRIGATÓRIOS
+    if (!form.titulo || !form.categoria || !form.data) {
+      alert("Preencha os campos obrigatórios marcados com *");
       return;
     }
 
-    const tarefasSalvas = JSON.parse(localStorage.getItem("tarefas")) || [];
-    const novaTarefa = { ...form, id: Date.now(), concluida: false };
-    localStorage.setItem("tarefas", JSON.stringify([...tarefasSalvas, novaTarefa]));
+    // 🔥 NOVA VALIDAÇÃO OBRIGATÓRIA DA PRIORIDADE
+    if (!form.prioridade) {
+      alert("Selecione a prioridade da tarefa! (*)");
+      return;
+    }
+
+    let armazenamento = JSON.parse(localStorage.getItem("tarefas"));
+    if (!armazenamento || !Array.isArray(armazenamento.tarefas)) {
+      armazenamento = { tarefas: [] };
+    }
+
+    const novaTarefa = {
+      id: Date.now(),
+      titulo: form.titulo,
+      descricao: form.descricao,
+      categoria: form.categoria,
+      prioridade: form.prioridade,
+      data: form.data,
+      concluida: false
+    };
+
+    armazenamento.tarefas.push(novaTarefa);
+    localStorage.setItem("tarefas", JSON.stringify(armazenamento));
 
     alert("Tarefa cadastrada com sucesso!");
-    window.location.href = "/tarefas";
+
+    setForm({
+      categoria: "",
+      titulo: "",
+      descricao: "",
+      data: "",
+      prioridade: "",
+    });
   };
 
   return (
     <div className="pagina-cadastro">
-      <MenuSuperior />
 
-      {/* 🔹 TÍTULO SEPARADO DO CONTAINER */}
+      <MenuSuperior categorias={categorias} setFiltro={() => {}} />
+
       <div className="titulo-container">
         <h1 className="titulo">CADASTRAR TAREFA</h1>
       </div>
 
-      {/* 🔹 CONTAINER PRINCIPAL */}
       <div className="cadastro-container">
         <form className="form-tarefa" onSubmit={(e) => e.preventDefault()}>
+
           <div className="input-group">
-            <label>CATEGORIA EXISTENTE</label>
+            <label>CATEGORIA EXISTENTE *</label>
             <select
               name="categoria"
               value={form.categoria}
@@ -101,7 +146,7 @@ export default function CadastrarTarefaPage() {
           </div>
 
           <div className="input-group">
-            <label>TÍTULO</label>
+            <label>TÍTULO *</label>
             <input
               type="text"
               name="titulo"
@@ -123,7 +168,7 @@ export default function CadastrarTarefaPage() {
           </div>
 
           <div className="input-group">
-            <label>DATA</label>
+            <label>DATA *</label>
             <input
               type="date"
               name="data"
@@ -132,8 +177,8 @@ export default function CadastrarTarefaPage() {
             />
           </div>
 
-          <div className="input-group">
-            <label>PRIORIDADE</label>
+          <div class="input-group">
+            <label>PRIORIDADE *</label>
             <select
               name="prioridade"
               value={form.prioridade}
@@ -162,3 +207,5 @@ export default function CadastrarTarefaPage() {
     </div>
   );
 }
+
+

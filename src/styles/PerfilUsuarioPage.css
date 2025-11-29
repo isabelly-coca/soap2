@@ -1,11 +1,9 @@
-/* ==================================== */
-/* 1. LAYOUT PRINCIPAL E TÍTULO         */
-/* ==================================== */
 
+/*LAYOUT PRINCIPAL E TÍTULO */
 .perfil-container {
-    max-width: 600px; /* Limita a largura em telas maiores */
+    max-width: 600px;
     margin: 0 auto;
-    padding: 20px 20px 90px 20px; /* Padding inferior para não cobrir o MenuInferior */
+    padding: 20px 20px 90px 20px;
     background-color: #f8f9fa;
     min-height: 100vh;
 }
@@ -20,10 +18,8 @@
     border-bottom: 2px solid #e9ecef;
 }
 
-/* ==================================== */
-/* 2. FOTO DE PERFIL                    */
-/* ==================================== */
 
+/*FOTO DE PERFIL*/
 .perfil-foto-secao {
     text-align: center;
     margin-bottom: 30px;
@@ -47,7 +43,7 @@
     position: absolute;
     bottom: 0;
     right: 0;
-    background-color: #6c63ff; /* Verde */
+    background-color: #6c63ff;
     color: white;
     border: 3px solid #ffffff;
     border-radius: 50%;
@@ -64,10 +60,8 @@
     background-color: #6c63ff;
 }
 
-/* ==================================== */
-/* 3. CAMPOS DE INFORMAÇÕES             */
-/* ==================================== */
 
+/*CAMPOS DE INFORMAÇÕES*/
 .campo-item {
     margin-bottom: 25px;
 }
@@ -108,7 +102,7 @@
 }
 
 .input-senha-wrapper input {
-    padding-right: 45px; /* Espaço para o botão */
+    padding-right: 45px;
 }
 
 .btn-mostrar-senha {

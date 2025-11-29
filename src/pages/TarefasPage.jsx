@@ -6,79 +6,16 @@ import MenuSuperior from "../components/MenuSuperior";
 
 const PRIORIDADES = ["Baixa", "Média", "Alta"];
 
-export default function TarefasPage() {
-  const [tarefas, setTarefas] = useState([]);
-  const [categorias, setCategorias] = useState([]);
-  const [edicaoAtual, setEdicaoAtual] = useState(null);
-  const [filtro, setFiltro] = useState({ categoria: "", prioridade: "" });
+// 🔹 Função para formatar datas no formato brasileiro (DD/MM/YYYY)
+function formatarDataBR(dataISO) {
+  if (!dataISO) return "";
+  const [ano, mes, dia] = dataISO.split("-");
+  return `${dia}/${mes}/${ano}`;
+}
 
-  // ---------------------------
-  // CARREGAR TAREFAS E CATEGORIAS DO LOCALSTORAGE
-  // ---------------------------
-  useEffect(() => {
-    const tarefasSalvas = JSON.parse(localStorage.getItem("tarefas")) || [];
-    const categoriasSalvas = JSON.parse(localStorage.getItem("categorias")) || [
-      "Trabalho",
-      "Pessoal",
-      "Finanças",
-      "Saúde",
-      "Estudos",
-      "Outro",
-    ];
-    setTarefas(tarefasSalvas);
-    setCategorias(categoriasSalvas);
-  }, []);
-
-  // ---------------------------
-  // FILTRO DE TAREFAS
-  // ---------------------------
-  const tarefasFiltradas = tarefas.filter((t) => {
-    const catOk = !filtro.categoria || t.categoria === filtro.categoria;
-    const prioOk = !filtro.prioridade || t.prioridade === filtro.prioridade;
-    return catOk && prioOk;
-  });
-
-  // ---------------------------
-  // FUNÇÕES DE AÇÃO
-  // ---------------------------
-  const alternarConclusao = (id) => {
-    const novasTarefas = tarefas.map((t) =>
-      t.id === id ? { ...t, concluida: !t.concluida } : t
-    );
-    setTarefas(novasTarefas);
-    localStorage.setItem("tarefas", JSON.stringify(novasTarefas));
-  };
-
-  const excluirTarefa = (id, e) => {
-    e.stopPropagation();
-    const novasTarefas = tarefas.filter((t) => t.id !== id);
-    setTarefas(novasTarefas);
-    localStorage.setItem("tarefas", JSON.stringify(novasTarefas));
-  };
-
-  const iniciarEdicao = (tarefa, e) => {
-    e.stopPropagation();
-    setEdicaoAtual({ ...tarefa });
-  };
-
-  const handleEdicaoChange = (e) => {
-    const { name, value } = e.target;
-    setEdicaoAtual({ ...edicaoAtual, [name]: value });
-  };
-
-  const salvarEdicao = (e) => {
-    e.preventDefault();
-    const novasTarefas = tarefas.map((t) =>
-      t.id === edicaoAtual.id ? edicaoAtual : t
-    );
-    setTarefas(novasTarefas);
-    localStorage.setItem("tarefas", JSON.stringify(novasTarefas));
-    setEdicaoAtual(null);
-  };
-
-  const cancelarEdicao = () => setEdicaoAtual(null);
-
-  const EdicaoForm = () => (
+// 🔹 Formulário de edição de tarefa
+function EdicaoForm({ edicaoAtual, handleEdicaoChange, salvarEdicao, cancelarEdicao, categorias }) {
+  return (
     <form onSubmit={salvarEdicao} className="edicao-form">
       <input
         type="text"
@@ -100,10 +37,9 @@ export default function TarefasPage() {
           value={edicaoAtual.categoria}
           onChange={handleEdicaoChange}
         >
+          <option value="">Selecione...</option>
           {categorias.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
+            <option key={c} value={c}>{c}</option>
           ))}
         </select>
         <select
@@ -111,55 +47,151 @@ export default function TarefasPage() {
           value={edicaoAtual.prioridade}
           onChange={handleEdicaoChange}
         >
+          <option value="">Selecione...</option>
           {PRIORIDADES.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
+            <option key={p} value={p}>{p}</option>
           ))}
         </select>
       </div>
       <label>Data:</label>
-      <input
-        type="date"
-        name="data"
-        value={edicaoAtual.data}
-        onChange={handleEdicaoChange}
-      />
+      <input type="date" name="data" value={edicaoAtual.data} onChange={handleEdicaoChange} />
       <div className="botoes-salvar-cancelar">
-        <button type="submit" className="btn-salvar">
-          Salvar
-        </button>
-        <button
-          type="button"
-          onClick={cancelarEdicao}
-          className="btn-cancelar"
-        >
-          Cancelar
-        </button>
+        <button type="submit" className="btn-salvar">Salvar</button>
+        <button type="button" onClick={cancelarEdicao} className="btn-cancelar">Cancelar</button>
       </div>
     </form>
   );
+}
 
-  // ---------------------------
-  // RENDERIZAÇÃO
-  // ---------------------------
+export default function TarefasPage() {
+  const [tarefas, setTarefas] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [edicaoAtual, setEdicaoAtual] = useState(null);
+  const [filtro, setFiltro] = useState({ categoria: "", prioridade: "" });
+
+
+
+  useEffect(() => {
+  const novasCategorias = [...new Set(tarefas.map(t => t.categoria).filter(Boolean))];
+  setCategorias(novasCategorias);
+}, [tarefas]);
+
+  // 🔹 Carregar tarefas e categorias do localStorage
+  const carregarTarefas = () => {
+    const tarefasRaw = localStorage.getItem("tarefas");
+    let armazenamento = { tarefas: [] };
+
+    try {
+      const parsed = JSON.parse(tarefasRaw);
+      if (Array.isArray(parsed)) {
+        armazenamento.tarefas = parsed;
+      } else if (parsed && parsed.tarefas) {
+        armazenamento = parsed;
+      }
+    } catch {
+      armazenamento = { tarefas: [] };
+    }
+
+    setTarefas(armazenamento.tarefas);
+
+    const categoriasSalvas = JSON.parse(localStorage.getItem("categorias")) || [];
+    setCategorias(categoriasSalvas);
+  };
+
+useEffect(() => {
+  carregarTarefas();
+
+  // Listener correto para tarefas
+  const listenerTarefas = () => carregarTarefas();
+  window.addEventListener("tarefas-atualizadas", listenerTarefas);
+
+  // Listener correto para filtros
+  const listenerFiltros = () => {
+    const filtrosSalvos = JSON.parse(localStorage.getItem("filtros")) || {};
+    setFiltro({
+      categoria: filtrosSalvos.categoria || "",
+      prioridade: filtrosSalvos.prioridade || "",
+      data: filtrosSalvos.data || "",
+    });
+  };
+  window.addEventListener("filtros-atualizados", listenerFiltros);
+
+  // Carrega os filtros ao abrir
+  const filtrosSalvos = JSON.parse(localStorage.getItem("filtros")) || {};
+  setFiltro({
+    categoria: filtrosSalvos.categoria || "",
+    prioridade: filtrosSalvos.prioridade || "",
+    data: filtrosSalvos.data || "",
+  });
+
+  return () => {
+    window.removeEventListener("tarefas-atualizadas", listenerTarefas);
+    window.removeEventListener("filtros-atualizados", listenerFiltros);
+  };
+}, []);
+
+
+
+  // 🔹 Garantir que tarefas sempre seja um array
+  const tarefasFiltradas = (tarefas || []).filter((t) => {
+    const catOk = !filtro.categoria || t.categoria === filtro.categoria;
+    const prioOk = !filtro.prioridade || t.prioridade === filtro.prioridade;
+    const dataOk = !filtro.data || t.data === filtro.data;
+    return catOk && prioOk && dataOk;
+  });
+
+  const alternarConclusao = (id) => {
+    const novas = tarefas.map((t) => (t.id === id ? { ...t, concluida: !t.concluida } : t));
+    setTarefas(novas);
+    localStorage.setItem("tarefas", JSON.stringify({ tarefas: novas }));
+  };
+
+  const excluirTarefa = (id, e) => {
+    e.stopPropagation();
+    const novas = tarefas.filter((t) => t.id !== id);
+    setTarefas(novas);
+    localStorage.setItem("tarefas", JSON.stringify({ tarefas: novas }));
+  };
+
+  const iniciarEdicao = (tarefa, e) => {
+    e.stopPropagation();
+    setEdicaoAtual({ ...tarefa });
+  };
+
+  const handleEdicaoChange = (e) => {
+    setEdicaoAtual({ ...edicaoAtual, [e.target.name]: e.target.value });
+  };
+
+  const salvarEdicao = (e) => {
+    e.preventDefault();
+    const novas = tarefas.map((t) => (t.id === edicaoAtual.id ? edicaoAtual : t));
+    setTarefas(novas);
+    localStorage.setItem("tarefas", JSON.stringify({ tarefas: novas }));
+    setEdicaoAtual(null);
+  };
+
+  const cancelarEdicao = () => setEdicaoAtual(null);
+
   return (
     <div className="tarefas-container">
       <MenuSuperior setFiltro={setFiltro} categorias={categorias} />
+
       <h1 className="titulo-tarefas">TAREFAS</h1>
 
       <div className="lista-tarefas">
         {tarefasFiltradas.length > 0 ? (
           tarefasFiltradas.map((tarefa) => {
             const isEditing = edicaoAtual && edicaoAtual.id === tarefa.id;
-
             return (
-              <div
-                key={tarefa.id}
-                className={`tarefa-item ${tarefa.concluida ? "concluida" : ""}`}
-              >
+              <div key={tarefa.id} className={`tarefa-item ${tarefa.concluida ? "concluida" : ""}`}>
                 {isEditing ? (
-                  <EdicaoForm />
+                  <EdicaoForm
+                    edicaoAtual={edicaoAtual}
+                    handleEdicaoChange={handleEdicaoChange}
+                    salvarEdicao={salvarEdicao}
+                    cancelarEdicao={cancelarEdicao}
+                    categorias={categorias}
+                  />
                 ) : (
                   <>
                     <div className="tarefa-conteudo">
@@ -167,32 +199,20 @@ export default function TarefasPage() {
                         type="checkbox"
                         checked={tarefa.concluida}
                         onChange={() => alternarConclusao(tarefa.id)}
-                        className="tarefa-checkbox"
                       />
-                      <span
-                        className={`tarefa-titulo ${
-                          tarefa.concluida ? "concluida" : ""
-                        }`}
-                      >
-                        {tarefa.titulo}
-                      </span>
+                      <div>
+                        <span className="tarefa-titulo">{tarefa.titulo}</span>
+                        {tarefa.descricao && <p className="tarefa-descricao">{tarefa.descricao}</p>}
+                        <div className="tarefa-meta-info">
+                          <span className="tarefa-categoria">{tarefa.categoria}</span>
+                          <span className="tarefa-prioridade">{tarefa.prioridade}</span>
+                          <span className="tarefa-data">{formatarDataBR(tarefa.data)}</span>
+                        </div>
+                      </div>
                     </div>
-
                     <div className="botoes-acao">
-                      <button
-                        className="btn-editar"
-                        onClick={(e) => iniciarEdicao(tarefa, e)}
-                        title="Editar"
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        className="btn-excluir"
-                        onClick={(e) => excluirTarefa(tarefa.id, e)}
-                        title="Excluir"
-                      >
-                        🗑️
-                      </button>
+                      <button className="btn-editar" onClick={(e) => iniciarEdicao(tarefa, e)}>✏️</button>
+                      <button className="btn-excluir" onClick={(e) => excluirTarefa(tarefa.id, e)}>🗑️</button>
                     </div>
                   </>
                 )}
@@ -204,12 +224,13 @@ export default function TarefasPage() {
         )}
       </div>
 
-      <Link to="/cadastrar-tarefa" className="btn-add">
-        +
-      </Link>
+      <Link to="/cadastrar-tarefa" className="btn-add">+</Link>
 
       <MenuInferior />
     </div>
   );
 }
+
+
+
 

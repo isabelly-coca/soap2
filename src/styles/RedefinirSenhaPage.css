@@ -4,7 +4,6 @@ body {
     padding: 0;
     font-family: "Poppins", sans-serif;
     background-color: #ebe8f5;
-    /* Centraliza o conteúdo (reset-container) na tela */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,50 +31,45 @@ body {
     width: 380px;
 }
 
-/* Título <h2>: RENOMEADO de .titulo para .reset-title */
 .reset-title {
     color: #3d4b68;
     margin-bottom: 25px;
     font-weight: bold;
 }
 
-/* Rótulo <label>: Adicionado para estilizar os textos "Nova Senha" */
+/*Nova Senha*/
 .reset-label {
-    /* Garante que o rótulo ocupe a linha inteira */
     display: block; 
     width: 100%;
-    text-align: left; /* Alinha o texto do rótulo à esquerda */
+    text-align: left; 
     margin-top: 15px;
     font-weight: 600;
     color: #3d4b68;
     font-size: 15px;
 }
-
-/* Campo de input: RENOMEADO de .input-field para .reset-input */
 .reset-input {
     width: 100%;
-    /* O padding horizontal deve compensar a largura do border-radius */
     padding: 12px 14px; 
-    margin: 5px 0 15px 0; /* Espaçamento ajustado */
+    margin: 5px 0 15px 0;
     border: 1px solid #a0a4b8;
     border-radius: 8px;
     font-size: 15px;
     font-weight: 500;
     color: #3d4b68;
-    box-sizing: border-box; /* Inclui padding e borda na largura total */
+    box-sizing: border-box; 
 }
 
-/* Foco do input (opcional, mas melhora a UX) */
+
 .reset-input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 91, 170, 0.6);
 }
 
-/* Botão de envio: RENOMEADO de .btn-reset para .reset-button */
+/* Botão de envio */
 .reset-button {
     margin-top: 20px;
-    width: 70%; /* Aumentado um pouco para melhor visual */
+    width: 70%;
     padding: 12px;
     background-color: #3d4b68;
     color: white;
@@ -88,15 +82,12 @@ body {
 }
 
 .reset-button:hover {
-    /* Mantive a mesma cor, mas você pode escurecer um pouco se quiser */
     background-color: #2b3952; 
 }
 
 /* Link de Voltar */
 .btn-voltar {
-    /* Alinha o botão "Voltar" à esquerda do reset-box */
     align-self: flex-start; 
-    
     background: none;
     border: none;
     color: #3d4b68;

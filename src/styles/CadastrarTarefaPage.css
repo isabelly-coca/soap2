@@ -1,59 +1,51 @@
-/* Garante que margens e paddings sejam controlados */
 * {
     box-sizing: border-box;
     margin: 0; 
     padding: 0; 
 }
 
-/* 🟢 O contêiner principal gerencia a altura e o espaçamento para os menus FIXOS. */
+/*PÁGINA*/
 .pagina-cadastro {
     min-height: 100vh;
-    background-color: #e8e6f3;
+    background-color: #e8e6f3; 
     font-family: "Poppins", sans-serif;
     color: #3d4b68;
-    box-sizing: border-box;
-    position: relative; 
-    
-    /* Espaço para o MenuSuperior FIXO */
-    padding-top: 80px; 
-    /* Espaço para o MenuInferior FIXO */
-    padding-bottom: 100px; 
+    position: relative;
+    padding-top: 80px;
+    padding-bottom: 100px;
 }
 
-/* 🟢 CORREÇÃO: Garante o espaçamento entre o título e o formulário */
+/*TÍTULO*/
 .titulo-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    /* Fundo transparente */
-    background-color: transparent; 
-    
-    /* ESSA MARGEM SEPARA O TÍTULO DO FORMULÁRIO ABAIXO */
-    margin-bottom: 20px; 
-    
-    padding: 0; 
+    background: transparent;
+    margin-bottom: 2px;
+    border: none !important;
 }
 
 .titulo {
     font-size: 1.8rem;
     color: #3d4b68;
     letter-spacing: 1px;
-    margin: 0; 
-    z-index: 10; 
-    position: relative; 
+    margin: 0;
+    background-color: transparent !important;
+    padding: 4px 12px;
+    border-radius: 8px;
+    position: relative;
 }
 
+/*CONTAINER DO FORMULÁRIO*/
 .cadastro-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: transparent; 
-    padding: 0 20px; 
-    /* Remove min-height daqui */
+    background: transparent;
 }
 
-/* O fundo branco está aqui */
+/*CARTÃO DO FORMULÁRIO */
 .form-tarefa {
     background: #fff;
     padding: 25px;
@@ -64,9 +56,10 @@
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-top: 0px;
 }
-/* ... RESTANTE DO SEU CSS ... */
 
+/*INPUTS*/
 .input-group {
     display: flex;
     flex-direction: column;
@@ -77,63 +70,6 @@
     font-size: 0.9rem;
     font-weight: 600;
     color: #4d5777;
-}
-
-.categoria-row {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-}
-
-.categoria-row select {
-    flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-    background-color: #f7f6fc;
-}
-
-.btn-nova-categoria {
-    background-color: #6a5acd;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background-color 0.3s;
-}
-
-.btn-nova-categoria:hover {
-    background-color: #5747b2;
-}
-
-.nova-categoria-container {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.nova-categoria-container input {
-    flex: 1;
-    padding: 8px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-}
-
-.btn-adicionar-categoria {
-    background-color: #6a5acd;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: background-color 0.3s;
-}
-
-.btn-adicionar-categoria:hover {
-    background-color: #5747b2;
 }
 
 .input-group input,
@@ -153,12 +89,59 @@
     border-color: #6a5acd;
     outline: none;
 }
+
+/*CATEGORIA*/
+.categoria-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.categoria-row select {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    background-color: #f7f6fc;
+}
+
+/* Botão adicionar categoria */
+.btn-nova-categoria,
+.btn-adicionar-categoria {
+    background-color: #6a5acd;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background-color 0.3s;
+}
+
+.btn-nova-categoria:hover,
+.btn-adicionar-categoria:hover {
+    background-color: #5747b2;
+}
+
+.nova-categoria-container {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.nova-categoria-container input {
+    flex: 1;
+    padding: 8px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+/*BOTÃO CADASTRAR*/
 .btn-cadastrar {
     display: block;
     width: 70%;
     max-width: 320px;
     margin: 20px auto 0;
-    box-sizing: border-box; 
     background-color: #6a5acd;
     color: #fff;
     border: none;
@@ -166,12 +149,11 @@
     padding: 12px 20px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
     text-align: center;
     font-size: 1rem;
     box-shadow: 0 4px 12px rgba(106, 90, 205, 0.25);
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
-
 
 .btn-cadastrar:hover {
     background-color: #5747b2;

@@ -1,86 +1,115 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import MenuInferior from "../components/MenuInferior";
-import MenuSuperior from "../components/MenuSuperior";
-import "../styles/CalendarioPage.css"; 
+import "../styles/CalendarioPage.css";
+
+/* NORMALIZA AS TAREFAS DO LOCALSTORAGE PARA UM MAPA POR DATA */
+function normalizarTarefas(raw) {
+  const mapa = {};
+
+  if (!raw) return mapa;
+
+  if (Array.isArray(raw)) {
+    raw.forEach((t) => {
+      if (!t) return;
+      const data = t.data || t.date || null;
+      const titulo = t.titulo || t.title || "Tarefa";
+      if (!data) return;
+      if (!mapa[data]) mapa[data] = [];
+      mapa[data].push(titulo);
+    });
+    return mapa;
+  }
+
+  if (typeof raw === "object") {
+    Object.keys(raw).forEach((dataKey) => {
+      const arr = raw[dataKey] || [];
+      mapa[dataKey] = arr.map((it) => (typeof it === "string" ? it : it?.titulo || "Tarefa"));
+    });
+    return mapa;
+  }
+
+  return mapa;
+}
 
 export default function CalendarioPage() {
   const hoje = new Date();
   const [ano, setAno] = useState(hoje.getFullYear());
   const [mes, setMes] = useState(hoje.getMonth());
+  const [tarefasPorData, setTarefasPorData] = useState({});
+
+const carregarTarefasDoStorage = useCallback(() => {
+  let tarefasArray = [];
+  try {
+    tarefasArray = JSON.parse(localStorage.getItem("tarefas"))?.tarefas || [];
+  } catch (e) {
+    tarefasArray = [];
+  }
+
+  const mapa = {};
+  tarefasArray.forEach((t) => {
+    if (!mapa[t.data]) mapa[t.data] = [];
+    mapa[t.data].push(t.titulo); // só o título vai pro calendário
+  });
+
+  setTarefasPorData(mapa);
+}, []);
+
+
+  /* Carregar ao montar e escutar atualizações */
+  useEffect(() => {
+    carregarTarefasDoStorage();
+
+    const onAtualizar = () => carregarTarefasDoStorage();
+    window.addEventListener("tarefas-atualizadas", onAtualizar);
+
+    return () => {
+      window.removeEventListener("tarefas-atualizadas", onAtualizar);
+    };
+  }, [carregarTarefasDoStorage]);
 
   const nomesMeses = [
     "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
     "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
   ];
+  const nomesDiasSemana = ["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
 
-  // Nomes abreviados dos dias da semana (Começando no Domingo: 0)
-  const nomesDiasSemana = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-
-  // Dados de exemplo das tarefas (mantido)
-  const tarefas = {
-    "2025-11-02": ["Revisar e responder e-mails pendentes"],
-    "2025-11-03": ["Atualizar planilha de controle financeiro"],
-    "2025-11-14": ["Organizar documentos", "Separar roupas para doação"],
-    "2025-11-15": ["Desconectar do celular antes de dormir", "Ler 10 páginas do livro"],
-  };
-
-  // Funções de navegação (mantidas)
   const mesAnterior = () => {
-    if (mes === 0) {
-      setMes(11);
-      setAno(ano - 1);
-    } else {
-      setMes(mes - 1);
-    }
+    if (mes === 0) { setMes(11); setAno(a => a - 1); } 
+    else setMes(m => m - 1);
   };
-
   const proximoMes = () => {
-    if (mes === 11) {
-      setMes(0);
-      setAno(ano + 1);
-    } else {
-      setMes(mes + 1);
-    }
+    if (mes === 11) { setMes(0); setAno(a => a + 1); } 
+    else setMes(m => m + 1);
   };
 
-  // --- LÓGICA DE GERAÇÃO DOS DIAS ---
   const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-  
-  // 🌟 NOVO: Calcula o dia da semana do primeiro dia do mês (0=Dom, 6=Sáb)
-  const diaSemanaPrimeiroDia = new Date(ano, mes, 1).getDay(); 
+  const diaSemanaPrimeiro = new Date(ano, mes, 1).getDay();
 
-  const diasRenderizados = [];
-
+  /* RENDERIZAÇÃO DOS DIAS */
+  const diasRender = [];
   for (let i = 1; i <= diasNoMes; i++) {
     const dataStr = `${ano}-${String(mes + 1).padStart(2,"0")}-${String(i).padStart(2,"0")}`;
-    const tarefasDoDia = tarefas[dataStr] || [];
+    const tarefasDia = tarefasPorData[dataStr] || [];
 
-    const diaClassName = `dia-celula ${tarefasDoDia.length > 0 ? 'dia-com-tarefa' : ''}`;
-    
-    // 🌟 NOVO: Define o estilo para o primeiro dia do mês
-    // 'gridColumnStart' define em qual coluna o dia 1 deve começar.
-    const style = i === 1 
-      ? { gridColumnStart: diaSemanaPrimeiroDia + 1 } // +1 porque CSS Grid começa em 1, JS .getDay() começa em 0
-      : {};
+    const style = i === 1 ? { gridColumnStart: diaSemanaPrimeiro + 1 } : {};
 
-    diasRenderizados.push(
-      <div key={i} className={diaClassName} style={style}>
+    diasRender.push(
+      <div key={i} className={`dia-celula ${tarefasDia.length > 0 ? "dia-com-tarefa" : ""}`} style={style}>
         <div className="dia-numero">{i}</div>
         <div className="tarefas-dia">
-          {tarefasDoDia.map((t, j) => (
-            <div key={j} className="tarefa">{t}</div>
-          ))}
+          {tarefasDia.length > 0 ? (
+            tarefasDia.map((t, idx) => <div key={idx} className="tarefa">{t}</div>)
+          ) : (
+            <div className="sem-tarefa"></div>
+          )}
         </div>
       </div>
     );
   }
-  // -----------------------------------
 
   return (
     <div className="calendario-container">
-      {/* Menu superior fixo */}
-      <MenuSuperior />
       <h1 className="titulo">📅 Calendário de Tarefas</h1>
 
       <div className="cabecalho-calendario">
@@ -89,26 +118,18 @@ export default function CalendarioPage() {
         <button onClick={proximoMes} className="btn-navegacao">{">"}</button>
       </div>
 
-      {/* 🌟 NOVO: Cabeçalho com os nomes dos dias da semana */}
       <div className="dias-semana-header">
-        {nomesDiasSemana.map(dia => (
-          <div key={dia} className="dia-nome">{dia}</div>
-        ))}
+        {nomesDiasSemana.map(dia => <div key={dia} className="dia-nome">{dia}</div>)}
       </div>
 
-      {/* Container principal do Grid */}
-      <div className="grid-calendario"> 
-        {diasRenderizados}
+      <div className="grid-calendario">{diasRender}</div>
+
+      <div className="rodape-acoes">
+        <Link to="/cadastrar-tarefa" className="btn-add">+</Link>
       </div>
 
-      <Link to="/cadastrar-tarefa" className="btn-add">
-        +
-      </Link>
       <MenuInferior />
     </div>
   );
 }
-
-
-
 

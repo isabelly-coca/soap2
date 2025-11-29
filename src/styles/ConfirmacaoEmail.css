@@ -99,7 +99,7 @@ body {
     box-sizing: border-box;
 }
 
-/* Estilo para a mensagem de instrução */
+
 .codigo-instrucao-texto {
     text-align: center;
     color: #666;
@@ -107,12 +107,12 @@ body {
     font-size: 14px;
 }
 
-/* Estilo para a mensagem de erro/sucesso */
+
 .mensagem-feedback {
     margin: 15px 0;
 }
 
-/* Ajuste o botão de verificação para ser um pouco maior */
+
 .reset-button.verificar {
     width: 80%;
 }

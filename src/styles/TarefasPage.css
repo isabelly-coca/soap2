@@ -1,21 +1,18 @@
-/* ===== Estilo geral ===== */
+/* Estilo geral*/
 body {
   margin: 0;
   padding: 0;
   font-family: "Poppins", sans-serif;
-  
   color: #3d4b68;
-  /* deixa a página rolar normalmente; a lista interna também tem overflow */
   overflow-y: auto;
 }
 
-/* ===== Container principal =====
-   Observação: espaço superior para o menu superior fixo (min-height do menu + padding) */
+/*Container principal*/
 .tarefas-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding: 76px 20px 90px; /* top = espaço para menu superior; bottom = espaço para footer/btn flutuante */
+  padding: 76px 20px 90px;
   width: 100%;
   max-width: 1600px;
   margin: 0 auto;
@@ -23,9 +20,9 @@ body {
   background-color: #e8e6f3;
 }
 
-/* ===== Título ===== */
+/*Título*/
 .titulo-tarefas {
-  margin-top: 8px; /* já temos padding-top no container para o menu */
+  margin-top: 8px; 
   font-size: 32px;
   font-weight: 700;
   color: #2c3554;
@@ -33,7 +30,7 @@ body {
   text-align: center;
 }
 
-/* ===== Lista de tarefas ===== */
+/*Lista de tarefas */
 .lista-tarefas {
   width: calc(100% - 20px);
   max-width: 1000px;
@@ -55,10 +52,10 @@ body {
   border-radius: 10px;
 }
 
-/* ===== Itens de tarefa ===== */
+/*Itens de tarefa*/
 .tarefa-item {
   display: flex;
-  align-items: center; /* centraliza checkbox, texto e botões */
+  align-items: center;
   justify-content: space-between;
   background-color: #f7f6fc;
   border-radius: 14px;
@@ -78,16 +75,16 @@ body {
               -3px -3px 12px rgba(255, 255, 255, 0.9);
 }
 
-/* ===== Conteúdo esquerdo: checkbox + título ===== */
+
 .tarefa-conteudo {
   display: flex;
   align-items: center;
   gap: 12px;
   flex: 1;
-  min-width: 0; /* permite truncamento do título em telas pequenas */
+  min-width: 0; 
 }
 
-/* Checkbox: classe específica para consistência */
+/*Checkbox*/
 .tarefa-checkbox,
 .tarefa-conteudo input[type="checkbox"] {
   width: 22px;
@@ -104,13 +101,12 @@ body {
   position: relative;
 }
 
-/* estilo do check quando marcado (usa :checked) */
 .tarefa-conteudo input[type="checkbox"]:checked {
   background-color: #6e7bbd;
   border-color: #6e7bbd;
 }
 
-/* colocando um ✓ quando checked (compatível com navegadores modernos) */
+/* colocando um ✓ quando checked*/
 .tarefa-conteudo input[type="checkbox"]:checked::after {
   content: "✓";
   color: #fff;
@@ -121,7 +117,7 @@ body {
   left: 5px;
 }
 
-/* ===== Título da tarefa ===== */
+/*Título da tarefa*/
 .tarefa-titulo {
   font-weight: 700;
   font-size: 17px;
@@ -133,7 +129,7 @@ body {
   text-overflow: ellipsis;
 }
 
-/* ===== Estado de tarefa concluída ===== */
+/*Estado de tarefa concluída*/
 .tarefa-item.concluida .tarefa-titulo,
 .tarefa-item.concluida .tarefa-descricao {
   text-decoration: line-through;
@@ -141,7 +137,7 @@ body {
   transition: all 0.25s ease;
 }
 
-/* ===== Prioridade (se usar) ===== */
+/*Prioridade*/
 .tarefa-prioridade {
   display: inline-block;
   font-size: 13px;
@@ -153,7 +149,7 @@ body {
   white-space: nowrap;
 }
 
-/* ===== Meta info (Categoria e Data) ===== */
+/*Categoria e Data*/
 .tarefa-meta-info {
   display: flex;
   gap: 12px;
@@ -167,7 +163,7 @@ body {
   color: #6e7bbd;
 }
 
-/* ===== Descrição ===== */
+/*Descrição*/
 .tarefa-descricao {
   font-size: 14px;
   line-height: 1.4;
@@ -175,7 +171,7 @@ body {
   color: #5c6784;
 }
 
-/* ===== Modo de Edição (aparece no lugar do item) ===== */
+/*Modo de Edição*/
 .edicao-form {
   display: flex;
   flex-direction: column;
@@ -235,7 +231,7 @@ body {
 }
 .btn-cancelar:hover { background: #d9d6ed; }
 
-/* ===== Ícones de ação (direita) ===== */
+/*Ícones de ação (direita)*/
 .botoes-acao {
   display: flex;
   align-items: center;
@@ -250,7 +246,7 @@ body {
   padding: 8px;
   border-radius: 8px;
   transition: background-color 0.18s ease, transform 0.12s ease;
-  font-size: 22px; /* ícones um pouco maiores */
+  font-size: 22px; 
   color: #3d4b68;
 }
 
@@ -259,10 +255,9 @@ body {
   transform: scale(1.06);
 }
 
-/* quando usa imagens dentro do botão */
 .botoes-acao button img { width: 28px; height: 28px; }
 
-/* ===== Botão de adicionar tarefa (flutuante) ===== */
+/*Botão de adicionar tarefa (flutuante)*/
 .btn-add {
     position: fixed;
     bottom: 90px;
@@ -278,10 +273,9 @@ body {
     z-index: 1000;
     cursor: pointer;
     transition: transform 0.2s;
-
-    display: flex;              /* 🔥 IMPORTANTE */
-    justify-content: center;    /* Centraliza horizontalmente */
-    align-items: center;        /* Centraliza verticalmente */
+    display: flex;             
+    justify-content: center;    
+    align-items: center;       
 }
 
 .btn-add:hover {
@@ -294,14 +288,14 @@ body {
 }
 
 
-/* ===== Mensagem quando não há tarefas ===== */
+/*Mensagem quando não há tarefas*/
 .sem-tarefas {
   text-align: center;
   color: #5d5f73;
   padding: 18px;
 }
 
-/* ===== Responsividade ===== */
+/*Responsividade*/
 @media (max-width: 900px) {
   .lista-tarefas {
     max-width: 94%;

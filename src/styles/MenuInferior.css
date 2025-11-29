@@ -1,87 +1,76 @@
-/* ===== Menu inferior (Ajustado para o estilo original) ===== */
+/* Menu inferior*/
 .footer-menu {
-  /* Mantido o posicionamento fixo do original */
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  /* Cor e borda do estilo original */
   background-color: #e8e6f3;
   border-top: 1.5px solid #4d5777; 
   display: flex;
   justify-content: space-around;
   align-items: center;
-  /* Altura do estilo original */
   height: 65px; 
 }
 
-/* Cada item do menu (Correspondente ao .menu-item original) */
+/* Cada item do menu*/
 .footer-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Cor e tamanho da fonte do estilo original */
   color: #3c4365;
   font-size: 12px;
   cursor: pointer;
-  /* Garante que o item de menu em si não tenha espaçamento extra */
   padding: 0; 
 }
 
-/* Links (Ajustado para o estilo original - sem sublinhado) */
+/* Links */
 .footer-link {
   text-decoration: none;
-  /* Cor do texto do estilo original */
   color: #3c4365;
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* Espaçamento entre ícone e texto */
   gap: 3px; 
-  transition: none; /* Removendo a transição de escala/cor para ficar mais fiel ao original */
+  transition: none;
 }
 
-/* Removendo :hover para manter a fidelidade ao estilo original */
+/* Menu Rodapé*/
 .footer-link:hover {
   transform: none; 
   color: #3c4365; 
 }
 
-/* Ícones (Correspondente ao .menu-item .icon original) */
+/* Ícones */
 .footer-icon {
-  /* Tamanho do ícone do estilo original */
   width: 22px; 
   height: 22px;
-  margin-bottom: 0; /* O espaçamento já está no gap do .footer-link */
-  object-fit: contain; /* Bom para imagens/SVGs */
+  margin-bottom: 0; 
+  object-fit: contain;
 }
 
-/* Imagem de perfil (Correspondente ao .foto-perfil original) */
+/* Imagem de perfil*/
 .perfil-icon {
-  /* Tamanho do perfil do estilo original */
   width: 38px; 
   height: 38px;
   border-radius: 50%;
-  /* Borda do estilo original */
   border: 1.5px solid #4d5777; 
   object-fit: cover;
 }
 
-/* Página ativa (Adicionando estilo para o estado 'ativo') */
+
 .ativo .footer-link {
-  /* Usando uma cor de destaque que combine com o tema */
   color: #5a6385;
   font-weight: 700;
 }
 
-/* Estilo responsivo para telas menores (mantendo fidelidade ao original) */
+/* Estilo responsivo para telas menores */
 @media (max-width: 400px) {
   .footer-menu {
-    height: 55px; /* Altura menor no original */
+    height: 55px; 
   }
 
   .footer-icon {
-    width: 18px; /* Ícone menor no original */
+    width: 18px;
     height: 18px;
   }
 }

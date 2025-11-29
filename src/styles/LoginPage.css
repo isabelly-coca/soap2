@@ -1,4 +1,4 @@
-/* ===== Estilos gerais ===== */
+/*Estilos gerais*/
 body {
   margin: 0;
   padding: 0;
@@ -10,7 +10,7 @@ body {
   justify-content: center;
 }
 
-/* ===== Container principal ===== */
+/*Container principal*/
 .login-container {
   width: 100%;
   height: 100%;
@@ -19,7 +19,7 @@ body {
   align-items: center;
 }
 
-/* ===== Caixa de login ===== */
+/*Caixa de login*/
 .login-box {
   background-color: rgba(255, 255, 255, 0.95);
   width: 380px;
@@ -32,7 +32,7 @@ body {
   align-items: center;
 }
 
-/* ===== Logo / título ===== */
+/*Logo / título*/
 .logo {
   font-size: 42px;
   color: #3d4b68;
@@ -40,7 +40,7 @@ body {
   margin-bottom: 30px;
 }
 
-/* ===== Campos de entrada ===== */
+/*Campos de entrada*/
 .input-field {
   width: 90%;
   padding: 12px 14px;
@@ -58,7 +58,7 @@ body {
   box-shadow: 0 0 5px rgba(0, 91, 170, 0.4);
 }
 
-/* ===== Botão de login ===== */
+/*Botão de login*/
 .login-button {
   width: 50%;
   background-color: #3d4b68;
@@ -86,7 +86,7 @@ body {
 
 
 
-/* ===== Links abaixo ===== */
+/*Links*/
 .links {
   margin-top: 20px;
   text-align: center;
